@@ -2,11 +2,6 @@
 
 > Todo List project created using React and Material UI Libary. 
 
-## Prerequisites
-
-- [nodejs](https://nodejs.org/en/) 
-- [yarn](https://www.boost.org/)
-
 ## Install
 
 ```sh
