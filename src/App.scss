@@ -1,0 +1,16 @@
+.main-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .top-bar {
+    flex: 0 1 5%;
+  }
+
+  .app-body {
+    position: relative;
+    flex: 1 1 auto;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+}
