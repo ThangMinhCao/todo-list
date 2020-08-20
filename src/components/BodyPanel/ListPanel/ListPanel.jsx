@@ -16,7 +16,6 @@ export default class ListPanel extends React.Component {
       todoItemContents: [...prevState.todoItemContents,
         { id: itemID, val: content, checked: false }],
     }));
-    this.onDeleteCheckedItems();
   }
 
   onDeleteCheckedItems() {
@@ -30,6 +29,7 @@ export default class ListPanel extends React.Component {
       todoItemContents: prevState.todoItemContents.map(
         (item) => (item.id === id ? { ...item, checked: !item.checked } : item),
       ),
+      // ).sort((a, b) => b.checked - a.checked),
     }));
   }
 

@@ -16,7 +16,7 @@ function Item(props) {
           className="item-text-box"
           primary={(
             <Typography
-              className="item-text"
+              className={!props.checked ? 'item-text-unchecked' : 'item-text-checked'}
             >
               {props.content}
             </Typography>

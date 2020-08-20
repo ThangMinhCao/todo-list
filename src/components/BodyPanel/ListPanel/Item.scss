@@ -1,0 +1,36 @@
+.item {
+  display: flex;
+  // border: 1px solid #79a7d4;
+  // border-radius: 10px;
+  .paper {
+    flex: 1;
+    display: flex;
+    border-radius: 10px;
+    width: 100%;
+
+    .item-text-unchecked, .item-text-checked {
+      flex: 1;
+      padding: 8px;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    @keyframes strike{
+      from { text-decoration-color: transparent; }
+      to { text-decoration-color: auto; }
+    }
+
+    @keyframes remove-strike{
+      from { text-decoration-color: auto; }
+      to { text-decoration-color: transparent; }
+    }
+    .item-text-checked {
+      text-decoration: line-through;
+      animation: strike 0.5s linear;
+    }
+
+    .item-checkbox {
+      flex: 0 1 auto;
+    }
+  }
+}
