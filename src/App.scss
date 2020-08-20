@@ -2,9 +2,10 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 500px;
 
   .top-bar {
-    flex: 0 1 5%;
+    flex: 0 1 50px;
   }
 
   .app-body {

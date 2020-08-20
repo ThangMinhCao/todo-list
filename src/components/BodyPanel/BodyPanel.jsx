@@ -1,6 +1,7 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import './BodyPanel.scss';
+import { v4 as uuidv4 } from 'uuid';
 import ListPanel from './ListPanel/ListPanel';
 import AddItemField from './FeaturePanel/AddItemField';
 
@@ -11,7 +12,7 @@ class BodyPanel extends React.Component {
   }
 
   onAddItem = (content) => {
-    this.listPanel.current.onAddContent(content);
+    this.listPanel.current.onAddContent(uuidv4(), content);
   }
 
   render() {

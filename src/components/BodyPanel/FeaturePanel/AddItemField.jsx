@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -17,12 +18,19 @@ export default class AddItemField extends React.Component {
   }
 
   onAddItem = () => {
-    this.onClickAdd(this.state.todoContent);
+    this.onClickAdd(this.state.todoContent === '' ? 'Empty item' : this.state.todoContent);
+    this.onClearAddField();
   }
 
   handleTextFieldChange = (value) => {
     this.setState({
       todoContent: value.target.value,
+    });
+  }
+
+  onClearAddField = () => {
+    this.setState({
+      todoContent: '',
     });
   }
 
@@ -51,6 +59,7 @@ export default class AddItemField extends React.Component {
           className="button"
           color="primary"
           aria-label="directions"
+          onClick={this.onClearAddField}
         >
           <DeleteIcon />
         </IconButton>
@@ -58,3 +67,7 @@ export default class AddItemField extends React.Component {
     );
   }
 }
+
+AddItemField.propTypes = {
+  addTodoItem: PropTypes.func.isRequired,
+};

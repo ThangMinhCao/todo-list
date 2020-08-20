@@ -1,29 +1,52 @@
 import React from 'react';
 import List from '@material-ui/core/List';
-import { v4 as uuidv4 } from 'uuid';
 import Item from './Item';
 
 export default class ListPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todoItemContents: ['123124', 'hello'],
+      todoItemContents: [],
     };
     this.onAddContent = this.onAddContent.bind(this);
   }
 
-  onAddContent(content) {
+  onAddContent(itemID, content) {
     this.setState((prevState) => ({
-      todoItemContents: [...prevState.todoItemContents, content],
+      todoItemContents: [...prevState.todoItemContents,
+        { id: itemID, val: content, checked: false }],
+    }));
+    this.onDeleteCheckedItems();
+  }
+
+  onDeleteCheckedItems() {
+    this.setState((prevState) => ({
+      todoItemContents: prevState.todoItemContents.filter((item) => !item.checked),
+    }));
+  }
+
+  toggleCheckBox = (id) => {
+    this.setState((prevState) => ({
+      todoItemContents: prevState.todoItemContents.map(
+        (item) => (item.id === id ? { ...item, checked: !item.checked } : item),
+      ),
     }));
   }
 
   render() {
     return (
       <List className="list">
-        {this.state.todoItemContents.map((value) => (
-          <Item id={value} key={uuidv4()} content={value} />
-        ))}
+        {this.state.todoItemContents.map(
+          (item) => (
+            <Item
+              id={item.id}
+              key={item.id}
+              content={item.val}
+              checked={item.checked}
+              onClickCheckBox={this.toggleCheckBox}
+            />
+          ),
+        )}
       </List>
     );
   }
