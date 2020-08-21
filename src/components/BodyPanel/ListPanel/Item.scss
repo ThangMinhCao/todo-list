@@ -2,15 +2,83 @@
   display: flex;
   // border: 1px solid #79a7d4;
   // border-radius: 10px;
+
+  .button-first, .button-not-finished, .button-finished, .end-button-group {
+    flex: 1 1 auto;
+    width: 25px;
+    border-radius: 5px;
+    box-shadow:
+      -2px 0px 3px 1px rgba(0,0,0,0.1),
+      0px 3px 4px 0px rgba(0,0,0,0.14),
+      0px 1px 8px 0px rgba(0,0,0,0.12);
+  }
+
+  .icon {
+    color: white;
+  }
+    
+
+  .button-field {
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    // position: absolute;
+    left: 5px;
+    top: 5px;
+    background-color: white;
+
+    :hover {
+      opacity: 0.85;
+    }
+
+    .button-first, .button-not-finished, .button-finished, .end-button-group {
+      background-color: #bbdefb;
+    }
+
+    @keyframes not-finish-to-finish{
+      from { background-color: #bbdefb; }
+    }
+
+    @keyframes finish-to-not-finish{
+      from { background-color: #43a047; }
+    }
+
+    .button-finished {
+      background-color: #43a047;
+      animation: not-finish-to-finish 1s;
+    }
+
+    .button-not-finished {
+      background-color: #bbdefb;
+      animation: finish-to-not-finish 0.5s;
+    }
+  }
+
+  .end-button-field {
+    display: flex;
+    flex-direction: column;
+    height: 20px;
+    position: absolute;
+    right: 5px;
+    bottom: 0px;
+    background-color: white;
+    border-radius: 5px;
+
+    .end-button-group {
+      height: 10px;
+      background-color: #ef5350;
+    }
+  }
+
   .paper {
     flex: 1;
     display: flex;
-    border-radius: 10px;
-    width: 100%;
+    width: 10%;
 
-    .item-text-unchecked, .item-text-checked {
+    .item-text-first, .item-text-unchecked, .item-text-checked {
       flex: 1;
       padding: 8px;
+      padding-left: 20px;
       word-wrap: break-word;
       white-space: pre-wrap;
     }
@@ -21,12 +89,18 @@
     }
 
     @keyframes remove-strike{
-      from { text-decoration-color: auto; }
+      from { text-decoration-color: black; }
       to { text-decoration-color: transparent; }
     }
     .item-text-checked {
       text-decoration: line-through;
       animation: strike 0.5s linear;
+    }
+
+    .item-text-unchecked {
+      text-decoration: line-through;
+      text-decoration-color: transparent;
+      animation: remove-strike 0.2s linear;
     }
 
     .item-checkbox {

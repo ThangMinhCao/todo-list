@@ -18,7 +18,7 @@ export default class AddItemField extends React.Component {
   }
 
   onAddItem = () => {
-    this.onClickAdd(this.state.todoContent === '' ? 'Empty item' : this.state.todoContent);
+    this.onClickAdd(this.state.todoContent);
     this.onClearAddField();
   }
 
