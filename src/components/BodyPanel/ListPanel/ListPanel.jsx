@@ -2,7 +2,7 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Item from './Item';
 import '../BodyPanel.scss';
 
@@ -57,14 +57,14 @@ export default class ListPanel extends React.Component {
         <Fab color="primary" className="fab-edit">
           <EditIcon />
         </Fab>
-        <TextField
+        {/* <TextField
           id="outlined-multiline-static"
           label="Multiline"
           multiline
           rows={4}
           defaultValue="Default Value"
           variant="outlined"
-        />
+        /> */}
       </List>
     );
   }

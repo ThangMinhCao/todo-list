@@ -22,7 +22,7 @@ class BodyPanel extends React.Component {
           {/* eslint-disable-next-line react/jsx-no-bind */}
           <AddItemField addTodoItem={this.onAddItem} />
         </div>
-        <Divider orientation="vertical" />
+        <Divider orientation="vertical" className="divider" />
         {/* eslint-disable-next-line no-return-assign */}
         <ListPanel ref={this.listPanel} />
       </div>

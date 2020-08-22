@@ -1,110 +1,164 @@
 .item {
   display: flex;
-  // border: 1px solid #79a7d4;
-  // border-radius: 10px;
-
-  .button-first, .button-not-finished, .button-finished, .end-button-group {
-    flex: 1 1 auto;
-    width: 25px;
-    border-radius: 5px;
-    box-shadow:
-      -2px 0px 3px 1px rgba(0,0,0,0.1),
-      0px 3px 4px 0px rgba(0,0,0,0.14),
-      0px 1px 8px 0px rgba(0,0,0,0.12);
-  }
 
   .icon {
     color: white;
   }
-    
+
 
   .button-field {
     display: flex;
-    flex-direction: column;
-    height: 50px;
-    // position: absolute;
-    left: 5px;
-    top: 5px;
-    background-color: white;
+    align-items: center;
+    padding-left: 5px;
 
-    :hover {
-      opacity: 0.85;
+    .icon {
+      font-size: 28px;
+      font-weight: bold;
     }
 
-    .button-first, .button-not-finished, .button-finished, .end-button-group {
-      background-color: #bbdefb;
+    .button-first, .button-not-finished, .button-finished {
+      box-shadow:
+        0px 2px 8px -1px rgba(0,0,0,0.2),
+        0px 3px 4px 0px rgba(0,0,0,0.13),
+        0px 1px 8px 0px rgba(0,0,0,0.12);
+      border-radius: 30px;
+      width: 30px;
+      height: 30px;
+      background-color: #c8e6c9;
     }
 
     @keyframes not-finish-to-finish{
-      from { background-color: #bbdefb; }
+      from { background-color: #c8e6c9; }
     }
 
     @keyframes finish-to-not-finish{
-      from { background-color: #43a047; }
+      from { background-color: #388e3c; }
     }
 
     .button-finished {
-      background-color: #43a047;
-      animation: not-finish-to-finish 1s;
+      background-color: #388e3c;
+      animation: not-finish-to-finish 0.4s ease-in;
     }
 
     .button-not-finished {
-      background-color: #bbdefb;
-      animation: finish-to-not-finish 0.5s;
+      background-color: #c8e6c9;
+      animation: finish-to-not-finish 0.4s ease-out;
     }
   }
 
-  .end-button-field {
-    display: flex;
-    flex-direction: column;
-    height: 20px;
-    position: absolute;
-    right: 5px;
-    bottom: 0px;
-    background-color: white;
-    border-radius: 5px;
-
-    .end-button-group {
-      height: 10px;
-      background-color: #ef5350;
-    }
+  .button-field:hover {
+    opacity: 0.9;
   }
 
   .paper {
     flex: 1;
     display: flex;
-    width: 10%;
+    // width: 10%;
+    align-items: center;
 
     .item-text-first, .item-text-unchecked, .item-text-checked {
       flex: 1;
-      padding: 8px;
-      padding-left: 20px;
-      word-wrap: break-word;
+      padding: 5px;
+      padding-left: 10px;
       white-space: pre-wrap;
+
+      word-break: break-all;
+      word-break: break-word;
+      white-space: pre-wrap;
+      text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.15);
     }
 
-    @keyframes strike{
-      from { text-decoration-color: transparent; }
-      to { text-decoration-color: auto; }
+    @keyframes blur {
+      from { opacity: 1; }
+      to { opacity: 0.3; }
     }
 
-    @keyframes remove-strike{
-      from { text-decoration-color: black; }
-      to { text-decoration-color: transparent; }
+    @keyframes remove-blur{
+      from { opacity: 0.3; }
+      to { opacity: 1; }
     }
     .item-text-checked {
-      text-decoration: line-through;
-      animation: strike 0.5s linear;
+      user-select: none;
+      opacity: 0.3;
+      animation: blur 0.4s linear;
     }
 
     .item-text-unchecked {
-      text-decoration: line-through;
-      text-decoration-color: transparent;
-      animation: remove-strike 0.2s linear;
+      opacity: 1;
+      animation: remove-blur 0.2s linear;
     }
 
-    .item-checkbox {
-      flex: 0 1 auto;
+    .end-button-field {
+      position: absolute;
+      right: 26px;
+      display: flex;
+      height: 45px;
+      background-color: white;
+      border-top-right-radius: 10px;
+      box-shadow:
+        -2px 2px 8px -1px rgba(0,0,0,0.2),
+        -2px 3px 4px 0px rgba(0,0,0,0.13),
+        -2px 1px 8px 0px rgba(0,0,0,0.12);
+      border-bottom-left-radius: 15px;
+      border-top-left-radius: 15px;
+      
+      :hover {
+        opacity: 0.9;
+      }
+
+      .modify-button-collapsed, .delete-button-collapsed, .edit-icon-collapsed, .delete-icon-collapsed{
+        color: white;
+        width: 0px;
+        transition: width 0.2s ease-out;
+      }
+
+      .delete-button, .modify-button, .edit-icon, .delete-icon {
+        color: white;
+        width: 28px;
+        transition: width 0.2s ease-out;
+      }
+
+      .delete-button, .delete-button-collapsed {
+        background-color:#e57373;
+      }
+
+      .modify-button, .modify-button-collapsed {
+        border-bottom-left-radius: 15px;
+        border-top-left-radius: 15px;
+      }
+
+      .modify-button, .modify-button-collapsed {
+        background-color: #7986cb;
+      }
+
+      .edit-icon, .delete-icon {
+        color: white;
+        font-size: 23px;
+      }
+    }
+
+    .expand-button-field {
+      height: 100%;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      box-shadow:
+        -2px 2px 8px -1px rgba(0,0,0,0.2),
+        -2px 3px 4px 0px rgba(0,0,0,0.13),
+        -2px 1px 8px 0px rgba(0,0,0,0.12);
+
+      :hover {
+        opacity: 0.9;
+      }
+
+      .expand-button {
+        width: 10px;
+        height: 50px;
+
+        .expand-icon {
+          color: #3f51b5;
+        }
+      }
     }
   }
+
 }

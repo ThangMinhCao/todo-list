@@ -6,7 +6,11 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import CheckIcon from '@material-ui/icons/Check';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import RemoveIcon from '@material-ui/icons/Remove';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+
 import './Item.scss';
 
 class Item extends React.Component {
@@ -18,10 +22,27 @@ class Item extends React.Component {
       finished: false,
       finishButtonClassName: 'button-first',
       textClassName: 'item-text-first',
+      endButtonsCollapsed: true,
     };
 
     this.onClickFinished = this.onClickFinished.bind(this);
     this.setContent = this.setContent.bind(this);
+    this.onClickExpandEndButton = this.onClickExpandEndButton.bind(this);
+    this.onClickEdit = this.onClickEdit.bind(this);
+  }
+
+  onClickEdit() {
+    this.setState((prevstate) => ({
+      ...prevstate,
+      endButtonsCollapsed: true,
+    }));
+  }
+
+  onClickExpandEndButton() {
+    this.setState((prevstate) => ({
+      ...prevstate,
+      endButtonsCollapsed: !prevstate.endButtonsCollapsed,
+    }));
   }
 
   onClickFinished() {
@@ -43,9 +64,9 @@ class Item extends React.Component {
   render() {
     return (
       <ListItem className="item" key={this.state.content}>
+        <Paper className="paper" elevation={3}>
           <div className="button-field">
             <ButtonBase
-              variant="contained"
               className={this.state.finishButtonClassName}
               // onClick={() => this.props.onClickFinished(this.props.id)}
               onClick={this.onClickFinished}
@@ -53,7 +74,6 @@ class Item extends React.Component {
               <CheckIcon className="icon" />
             </ButtonBase>
           </div>
-        <Paper className="paper" elevation={5}>
           <ListItemText
             disableTypography
             className="item-text-box"
@@ -67,12 +87,48 @@ class Item extends React.Component {
           />
           <div className="end-button-field">
             <ButtonBase
-              variant="contained"
-              className="end-button-group"
-              // onClick={() => this.props.onClickFinished(this.props.id)}
+              className={
+                this.state.endButtonsCollapsed
+                  ? 'modify-button-collapsed'
+                  : 'modify-button'
+              }
+              // className="modify-button"
+              // onClick={() => this.props.deleteSelf(this.props.id)}
+            >
+              <EditIcon
+                onClick={this.onClickEdit}
+                className={
+                  this.state.endButtonsCollapsed
+                    ? 'edit-icon-collapsed'
+                    : 'edit-icon'
+                }
+              />
+            </ButtonBase>
+            <ButtonBase
+              className={
+                this.state.endButtonsCollapsed
+                  ? 'delete-button-collapsed'
+                  : 'delete-button'
+              }
               onClick={() => this.props.deleteSelf(this.props.id)}
             >
-              <RemoveIcon className="icon" />
+              <DeleteOutlineIcon
+                className={this.state.endButtonsCollapsed
+                  ? 'delete-icon-collapsed'
+                  : 'delete-icon'}
+              />
+            </ButtonBase>
+          </div>
+          <div className="expand-button-field">
+            <ButtonBase
+              className="expand-button"
+              onClick={this.onClickExpandEndButton}
+            >
+              {
+                this.state.endButtonsCollapsed
+                  ? <ArrowLeftIcon className="expand-icon" />
+                  : <ArrowRightIcon className="expand-icon" />
+              }
             </ButtonBase>
           </div>
         </Paper>
