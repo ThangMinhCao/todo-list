@@ -94,9 +94,9 @@ class Item extends React.Component {
               }
               // className="modify-button"
               // onClick={() => this.props.deleteSelf(this.props.id)}
+              onClick={this.onClickEdit}
             >
               <EditIcon
-                onClick={this.onClickEdit}
                 className={
                   this.state.endButtonsCollapsed
                     ? 'edit-icon-collapsed'

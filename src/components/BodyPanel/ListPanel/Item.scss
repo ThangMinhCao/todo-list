@@ -5,11 +5,10 @@
     color: white;
   }
 
-
   .button-field {
     display: flex;
-    align-items: center;
-    padding-left: 5px;
+    // align-items: center;
+    // padding-left: 5px;
 
     .icon {
       font-size: 28px;
@@ -21,9 +20,9 @@
         0px 2px 8px -1px rgba(0,0,0,0.2),
         0px 3px 4px 0px rgba(0,0,0,0.13),
         0px 1px 8px 0px rgba(0,0,0,0.12);
-      border-radius: 30px;
-      width: 30px;
-      height: 30px;
+      // border-radius: 30px;
+      // width: 30px;
+      height: 50px;
       background-color: #c8e6c9;
     }
 
@@ -53,46 +52,48 @@
   .paper {
     flex: 1;
     display: flex;
-    // width: 10%;
+    overflow: hidden;
     align-items: center;
 
     .item-text-first, .item-text-unchecked, .item-text-checked {
       flex: 1;
       padding: 5px;
       padding-left: 10px;
-      white-space: pre-wrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
 
-      word-break: break-all;
-      word-break: break-word;
+      @-moz-document url-prefix() {
+        word-break: break-all;
+      }
       white-space: pre-wrap;
       text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.15);
     }
 
     @keyframes blur {
       from { opacity: 1; }
-      to { opacity: 0.3; }
+      to { opacity: 0.4; }
     }
 
     @keyframes remove-blur{
-      from { opacity: 0.3; }
+      from { opacity: 0.4; }
       to { opacity: 1; }
     }
     .item-text-checked {
       user-select: none;
-      opacity: 0.3;
-      animation: blur 0.4s linear;
+      opacity: 0.4;
+      animation: blur 0.4s ease-out;
     }
 
     .item-text-unchecked {
       opacity: 1;
-      animation: remove-blur 0.2s linear;
+      animation: remove-blur 0.2s ease-in;
     }
 
     .end-button-field {
       position: absolute;
-      right: 26px;
+      right: 24px;
       display: flex;
-      height: 45px;
+      height: 40px;
       background-color: white;
       border-top-right-radius: 10px;
       box-shadow:
@@ -114,21 +115,21 @@
 
       .delete-button, .modify-button, .edit-icon, .delete-icon {
         color: white;
-        width: 28px;
+        width: 40px;
         transition: width 0.2s ease-out;
       }
 
       .delete-button, .delete-button-collapsed {
-        background-color:#e57373;
+        background-color:#ef5350;
       }
 
       .modify-button, .modify-button-collapsed {
-        border-bottom-left-radius: 15px;
-        border-top-left-radius: 15px;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
       }
 
       .modify-button, .modify-button-collapsed {
-        background-color: #7986cb;
+        background-color: #5c6bc0;
       }
 
       .edit-icon, .delete-icon {
@@ -139,8 +140,6 @@
 
     .expand-button-field {
       height: 100%;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
       box-shadow:
         -2px 2px 8px -1px rgba(0,0,0,0.2),
         -2px 3px 4px 0px rgba(0,0,0,0.13),
@@ -151,7 +150,7 @@
       }
 
       .expand-button {
-        width: 10px;
+        width: 8px;
         height: 50px;
 
         .expand-icon {
@@ -160,5 +159,4 @@
       }
     }
   }
-
 }
