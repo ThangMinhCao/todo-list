@@ -1,0 +1,172 @@
+.item {
+  display: flex;
+
+  .icon {
+    color: white;
+  }
+
+  .button-field {
+    display: flex;
+    z-index: 1000;
+    .icon {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .button-first, .button-not-finished, .button-finished {
+      position: absolute;
+      top: 0px;
+      left: 5px;
+      border-radius: 20px;
+    }
+    .button-first, .button-not-finished {
+      background-color: #c8e6c9;
+      // transition: box-shadow 0.4s;
+      transition: background-color 0.4s ease;
+    }
+
+    .button-finished {
+      background-color: #388e3c;
+      transition: background-color 0.8s ease-out;
+      // transition: box-shadow 0.4s;
+      box-shadow:
+        0px 2px 8px -1px rgba(0,0,0,0.2),
+        0px 3px 4px 0px rgba(0,0,0,0.13),
+        0px 1px 8px 0px rgba(0,0,0,0.12);
+    }
+
+    // .button-not-finished {
+    //   background-color: #c8e6c9;
+    //   animation: finish-to-not-finish 0.4s ease-out;
+    // }
+  }
+
+  .button-field:hover {
+    opacity: 0.9;
+  }
+
+  .paper {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    padding-top: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    .item-text-first, .item-text-unchecked, .item-text-checked {
+      flex: 1;
+      padding: 5px;
+      padding-left: 10px;
+      overflow: hidden;
+
+      word-break: break-word;
+      @-moz-document url-prefix() {
+        word-break: break-all;
+      }
+      white-space: pre-wrap;
+    }
+
+    .item-text-checked {
+      user-select: none;
+      opacity: 0.4;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .item-text-unchecked {
+      opacity: 1;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .end-button-field {
+      position: absolute;
+      right: 20px;
+      display: flex;
+      height: 22px;
+      top: 0px;
+      background-color: white;
+      border-top-right-radius: 10px;
+      box-shadow:
+        -2px 2px 8px -1px rgba(0,0,0,0.2),
+        -2px 3px 4px 0px rgba(0,0,0,0.13),
+        -2px 1px 8px 0px rgba(0,0,0,0.12);
+      border-bottom-left-radius: 15px;
+      border-top-left-radius: 15px;
+      
+      :hover {
+        opacity: 0.9;
+      }
+
+      .modify-button-collapsed, .delete-button-collapsed,
+      .edit-icon-collapsed, .delete-icon-collapsed {
+        color: white;
+        width: 0px;
+        transition: width 0.2s ease-out;
+      }
+
+      .delete-button, .modify-button {
+        color: white;
+        width: 40px;
+        transition: width 0.2s ease-out;
+      }
+
+      .delete-button, .delete-button-collapsed {
+        background-color:#ef5350;
+      }
+
+      .modify-button, .modify-button-collapsed {
+        background-color: #5c6bc0;
+        width: 40px;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
+      }
+
+      .modify-button-collapsed {
+        width: 0px;
+      }
+
+      // .edit-icon-collapsed {
+      //   padding-right: 5px;
+      //   width: 20px;
+      //   transition: padding-right 0.3s ease;
+      // }
+
+      .edit-icon, .delete-icon {
+        color: white;
+        font-size: 20px;
+        transition: width 0.2s ease-out;
+        transition: padding-right 0.3s ease;
+      }
+
+      .delete-icon {
+        padding-right: 6px;
+      }
+    }
+
+    .expand-button-field {
+      height: 100%;
+      position: absolute;
+      height: 22px;
+      top: 0px;
+      right: 5px;
+      border-radius: 20px; 
+      box-shadow:
+        -2px 2px 8px -1px rgba(0,0,0,0.2),
+        -2px 3px 4px 0px rgba(0,0,0,0.13),
+        -2px 1px 8px 0px rgba(0,0,0,0.12);
+
+
+      .expand-button:hover {
+        background-color: #fafafa;
+      }
+      .expand-button {
+        background-color: white;
+        border-radius: 20px; 
+        height: 100%;
+        .expand-icon {
+          color: #3f51b5;
+        }
+      }
+    }
+  }
+}
