@@ -1,18 +1,21 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import './BodyPanel.scss';
-import ListPanel from './ListPanel/ListPanel';
+import ListPanel from './ItemPanel/ListPanel';
 // import AddItemField from './ListPanel/AddItemField';
 
 class BodyPanel extends React.Component {
   constructor() {
     super();
-    this.listPanel = React.createRef();
+    // this.listPanel = React.createRef();
+    this.state = ({
+      todoLists: {},
+    });
   }
 
-  // onAddItem = (content) => {
-  //   this.listPanel.current.onAddContent(uuidv4(), content);
-  // }
+  onAddList = (list) => {
+    this.listPanel.current.onAddContent(list);
+  }
 
   render() {
     return (
@@ -23,7 +26,7 @@ class BodyPanel extends React.Component {
         </div>
         <Divider orientation="vertical" className="divider" />
         {/* eslint-disable-next-line no-return-assign */}
-        <ListPanel ref={this.listPanel} />
+        <ListPanel />
       </div>
     );
   }
