@@ -7,6 +7,8 @@ import AddIcon from '@material-ui/icons/Add';
 import InputBase from '@material-ui/core/InputBase';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import TranslateIcon from '@material-ui/icons/Translate';
+import translate from '../../../api/translate';
 import '../BodyPanel.scss';
 
 export default class AddItemField extends React.Component {
@@ -18,6 +20,7 @@ export default class AddItemField extends React.Component {
       snackBarOpened: false,
     };
     this.onClickAdd = props.addTodoItem;
+    this.translateText = this.translateText.bind(this);
   }
 
   onAddItem = () => {
@@ -37,7 +40,6 @@ export default class AddItemField extends React.Component {
 
   toggleSnackbar = () => {
     this.setState((prevstate) => ({
-      ...prevstate,
       snackBarOpened: !prevstate.snackBarOpened,
     }));
     // console.log(this.state.snackBarOpened)
@@ -47,6 +49,27 @@ export default class AddItemField extends React.Component {
     this.setState({
       todoContent: '',
     });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async translateText() {
+    try {
+      const response = await translate.get('/text/translate',
+        {
+          params: {
+            source: 'en',
+            target: 'vi',
+            // eslint-disable-next-line react/no-access-state-in-setstate
+            input: this.state.todoContent,
+          },
+        });
+      this.setState({
+        todoContent: response.data.outputs[0].output,
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    }
   }
 
   render() {
@@ -78,6 +101,15 @@ export default class AddItemField extends React.Component {
           value={this.state.todoContent}
           onChange={this.handleTextFieldChange}
         />
+        <IconButton
+          className="button"
+          color="primary"
+          aria-label="directions"
+          // onClick={this.onClearAddField}
+          onClick={this.translateText}
+        >
+          <TranslateIcon />
+        </IconButton>
         <IconButton
           className="button"
           color="primary"

@@ -91,6 +91,7 @@ class Item extends React.Component {
                   : 'modify-button'
               }
               onClick={this.onClickEdit}
+              // onClick={this.callAPI}
             >
               <EditIcon
                 className={
