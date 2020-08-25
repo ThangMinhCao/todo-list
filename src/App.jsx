@@ -1,6 +1,6 @@
 import React from 'react';
-import TopBar from './components/AppHeader/AppHeader';
-import BodyPanel from './components/BodyPanel/BodyPanel';
+import TopBar from './components/MainPage/AppHeader/AppHeader';
+import BodyPanel from './components/MainPage/BodyPanel/BodyPanel';
 import './App.scss';
 
 function App() {
