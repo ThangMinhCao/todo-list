@@ -10,6 +10,12 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import Dialog from '@material-ui/core/Dialog';
+import TextField from '@material-ui/core/TextField';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
 
 import './Item.scss';
 
@@ -18,24 +24,28 @@ class Item extends React.Component {
     super(props);
 
     this.state = {
+      editting: false,
       content: this.props.content,
       finished: false,
       finishButtonClassName: 'button-first',
       textClassName: 'item-text-first',
       endButtonsCollapsed: true,
+      newContent: '',
     };
 
     this.onClickFinished = this.onClickFinished.bind(this);
     this.setContent = this.setContent.bind(this);
     this.onClickExpandEndButton = this.onClickExpandEndButton.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
+    this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
+    this.onFinishedDialog = this.onFinishedDialog.bind(this);
   }
 
   onClickEdit() {
-    this.setState((prevstate) => ({
-      ...prevstate,
+    this.setState({
+      editting: true,
       endButtonsCollapsed: true,
-    }));
+    });
   }
 
   onClickExpandEndButton() {
@@ -53,9 +63,30 @@ class Item extends React.Component {
     this.props.toggleFinished(this.props.id);
   }
 
+  onFinishedDialog() {
+    this.setContent(this.state.newContent);
+    this.handleCloseEditDialog();
+  }
+
   setContent(newContent) {
+    if (newContent === '') {
+      this.props.toggleEmptyAlert();
+    } else {
+      this.setState({
+        content: newContent,
+      });
+    }
+  }
+
+  handleCloseEditDialog() {
     this.setState({
-      content: newContent,
+      editting: false,
+    });
+  }
+
+  handleNewContent(content) {
+    this.setState({
+      newContent: content,
     });
   }
 
@@ -79,7 +110,7 @@ class Item extends React.Component {
               <Typography
                 className={this.state.textClassName}
               >
-                {this.props.content === '' ? 'Empty Item' : this.props.content}
+                {this.state.content === '' ? 'Empty Item' : this.state.content}
               </Typography>
             )}
           />
@@ -129,6 +160,39 @@ class Item extends React.Component {
             </ButtonBase>
           </div>
         </Paper>
+
+        <Dialog
+          maxWidth="sm"
+          fullWidth
+          onClose={this.handleCloseEditDialog}
+          open={this.state.editting}
+          aria-labelledby="dialog-title"
+        >
+          <DialogTitle id="dialog-title">Edit Item</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              required
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              multiline
+              rowsMax={5}
+              rows={5}
+              label="New content"
+              defaultValue={this.state.content}
+              onChange={(event) => { this.handleNewContent(event.target.value); }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleCloseEditDialog} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.onFinishedDialog} color="primary">
+              Finished
+            </Button>
+          </DialogActions>
+        </Dialog>
       </ListItem>
     );
   }
@@ -139,6 +203,7 @@ Item.propTypes = {
   content: PropTypes.string.isRequired,
   deleteSelf: PropTypes.func.isRequired,
   toggleFinished: PropTypes.func.isRequired,
+  toggleEmptyAlert: PropTypes.func.isRequired,
 };
 
 export default Item;

@@ -5,9 +5,9 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import InputBase from '@material-ui/core/InputBase';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import TranslateIcon from '@material-ui/icons/Translate';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 import translate from '../../../api/translate';
 import '../BodyPanel.scss';
 
@@ -17,19 +17,19 @@ export default class AddItemField extends React.Component {
 
     this.state = {
       todoContent: '',
-      snackBarOpened: false,
+      loading: false,
+      translating: false,
     };
     this.onClickAdd = props.addTodoItem;
     this.translateText = this.translateText.bind(this);
   }
 
-  onAddItem = () => {
-    if (this.state.todoContent) {
-      this.onClickAdd(this.state.todoContent);
-      this.onClearAddField();
-    } else {
-      this.toggleSnackbar();
+  onAddItem = async () => {
+    if (this.state.translating) {
+      await this.translateText();
     }
+    this.onClickAdd(this.state.todoContent);
+    this.onClearAddField();
   }
 
   handleTextFieldChange = (value) => {
@@ -38,22 +38,29 @@ export default class AddItemField extends React.Component {
     });
   }
 
-  toggleSnackbar = () => {
-    this.setState((prevstate) => ({
-      snackBarOpened: !prevstate.snackBarOpened,
-    }));
-    // console.log(this.state.snackBarOpened)
-  }
-
   onClearAddField = () => {
     this.setState({
       todoContent: '',
     });
   }
 
+  onToggleLoading = () => {
+    this.setState((prevstate) => ({
+      loading: !prevstate.loading,
+    }));
+  }
+
+  onToggleTranslating = () => {
+    this.setState((prevstate) => ({
+      translating: !prevstate.translating,
+    }));
+  }
+
   // eslint-disable-next-line class-methods-use-this
   async translateText() {
     try {
+      // await this.onToggleLoading();
+      this.onToggleLoading();
       const response = await translate.get('/text/translate',
         {
           params: {
@@ -63,62 +70,71 @@ export default class AddItemField extends React.Component {
             input: this.state.todoContent,
           },
         });
+      this.onToggleLoading();
       this.setState({
         todoContent: response.data.outputs[0].output,
       });
+      // console.log(response);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
     }
   }
 
+  // async getSupportedLanguages() {
+  //   try {
+  //     const response = await
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
   render() {
     return (
-      <Paper className="add-item-field" elevation={8}>
-        <Snackbar
-          open={this.state.snackBarOpened}
-          message="Please insert the item's content"
-          onClose={this.toggleSnackbar}
-          autoHideDuration={1500}
-        >
-          <MuiAlert severity="error">Empty content!</MuiAlert>
-        </Snackbar>
-        <IconButton
-          className="button"
-          color="primary"
-          aria-label="directions"
-          onClick={this.onAddItem}
-        >
-          <AddIcon />
-        </IconButton>
-        <InputBase
-          rows={4}
-          rowsMax={4}
-          color="primary"
-          className="input"
-          placeholder="Enter item content"
-          multiline
-          value={this.state.todoContent}
-          onChange={this.handleTextFieldChange}
-        />
-        <IconButton
-          className="button"
-          color="primary"
-          aria-label="directions"
-          // onClick={this.onClearAddField}
-          onClick={this.translateText}
-        >
-          <TranslateIcon />
-        </IconButton>
-        <IconButton
-          className="button"
-          color="primary"
-          aria-label="directions"
-          onClick={this.onClearAddField}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </Paper>
+      <div style={{ width: '100vw' }}>
+        {this.state.loading ? <LinearProgress className="progress" /> : <div />}
+        <Paper className="add-item-field" elevation={8}>
+          <IconButton
+            className="button"
+            color="primary"
+            aria-label="directions"
+            onClick={this.onAddItem}
+          >
+            <AddIcon />
+          </IconButton>
+          <InputBase
+            rows={4}
+            rowsMax={4}
+            color="primary"
+            className="input"
+            placeholder="Enter item content"
+            multiline
+            value={this.state.todoContent}
+            onChange={this.handleTextFieldChange}
+          />
+          <Tooltip arrow title={this.state.translating ? 'Translation on add enabled' : 'Translation on add disabled'}>
+            <IconButton
+              className="button"
+              color="primary"
+              aria-label="directions"
+              // onClick={this.state.todoContent !== '' ? this.translateText : null}
+              onClick={this.onToggleTranslating}
+            >
+              <TranslateIcon color={this.state.translating ? 'primary' : 'disabled'} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip arrow title="Clear text field">
+            <IconButton
+              className="button"
+              color="primary"
+              aria-label="directions"
+              onClick={this.onClearAddField}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Paper>
+      </div>
     );
   }
 }
