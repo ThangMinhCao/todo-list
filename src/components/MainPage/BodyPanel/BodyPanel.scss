@@ -12,7 +12,7 @@
     min-width: 200px;
   }
 
-  .list-panel {
+  .item-panel {
     min-width: 220px;
     width: 60%px;
     flex: 3 1 auto;
@@ -30,6 +30,15 @@
 
     .button {
       width: 35px;
+    }
+
+    .progress {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      width: 100vw;
+      height: 5px;
     }
 
     .add-item-field {

@@ -1,10 +1,13 @@
 # todo-list 
 
-> Todo List project created using React and Material UI Libary. 
+> A simple to-do list web project created using React and Material UI Libary with the additional use
+> > of SYSTRAN API. The app is hosted by Firebase Hosting.
 
 ### :link: [Try it out](https://todo-list-4bdd6.web.app/)
 
-## Install
+## Try locally
+
+### Install
 
 ```sh
 npm install
@@ -14,7 +17,7 @@ or
 yarn install
 ```
 
-## Run
+### Run
 
 In the directory of the repo:
 ```sh

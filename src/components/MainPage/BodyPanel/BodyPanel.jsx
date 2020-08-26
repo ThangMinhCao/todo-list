@@ -1,7 +1,8 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import './BodyPanel.scss';
-import ListPanel from './ItemPanel/ListPanel';
+import ItemPanel from './ItemPanel/ItemPanel';
+import ListPanel from './ListPanel/ListPanel';
 // import AddItemField from './ListPanel/AddItemField';
 
 class BodyPanel extends React.Component {
@@ -20,13 +21,10 @@ class BodyPanel extends React.Component {
   render() {
     return (
       <div className="container">
-        <div className="feature-panel">
-          {/* eslint-disable-next-line react/jsx-no-bind */}
-          {/* <AddItemField addTodoItem={this.onAddItem} /> */}
-        </div>
+        <ListPanel />
         <Divider orientation="vertical" className="divider" />
         {/* eslint-disable-next-line no-return-assign */}
-        <ListPanel />
+        <ItemPanel />
       </div>
     );
   }

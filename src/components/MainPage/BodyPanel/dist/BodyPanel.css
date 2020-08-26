@@ -10,14 +10,14 @@
   padding: 5px;
   min-width: 200px;
 }
-.container .list-panel {
+.container .item-panel {
   min-width: 220px;
   width: 60% px;
   flex: 3 1 auto;
   max-height: 100vh;
   overflow: auto;
 }
-.container .list-panel .fab-edit {
+.container .item-panel .fab-edit {
   height: 50px;
   width: 50px;
   bottom: 15px;
@@ -25,14 +25,22 @@
   position: fixed;
   z-index: 1;
 }
-.container .list-panel .button {
+.container .item-panel .button {
   width: 35px;
 }
-.container .list-panel .add-item-field {
+.container .item-panel .progress {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 5px;
+}
+.container .item-panel .add-item-field {
   display: flex;
   flex: 1;
 }
-.container .list-panel .add-item-field .input {
+.container .item-panel .add-item-field .input {
   padding: 10px;
   padding-right: 5px;
   flex: 1 1 auto;

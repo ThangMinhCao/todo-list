@@ -65,6 +65,7 @@ class Item extends React.Component {
 
   onFinishedDialog() {
     this.setContent(this.state.newContent);
+    this.props.toggleSuccessAlert();
     this.handleCloseEditDialog();
   }
 
@@ -172,7 +173,6 @@ class Item extends React.Component {
           <DialogContent>
             <TextField
               autoFocus
-              required
               variant="outlined"
               margin="dense"
               fullWidth
@@ -204,6 +204,7 @@ Item.propTypes = {
   deleteSelf: PropTypes.func.isRequired,
   toggleFinished: PropTypes.func.isRequired,
   toggleEmptyAlert: PropTypes.func.isRequired,
+  toggleSuccessAlert: PropTypes.func.isRequired,
 };
 
 export default Item;

@@ -25,7 +25,7 @@ export default class AddItemField extends React.Component {
   }
 
   onAddItem = async () => {
-    if (this.state.translating) {
+    if (this.state.translating && this.state.todoContent) {
       await this.translateText();
     }
     this.onClickAdd(this.state.todoContent);
@@ -93,12 +93,14 @@ export default class AddItemField extends React.Component {
     return (
       <div style={{ width: '100vw' }}>
         {this.state.loading ? <LinearProgress className="progress" /> : <div />}
+        {/* <LinearProgress className="progress" /> */}
         <Paper className="add-item-field" elevation={8}>
           <IconButton
             className="button"
             color="primary"
             aria-label="directions"
             onClick={this.onAddItem}
+            disabled={this.state.loading}
           >
             <AddIcon />
           </IconButton>
