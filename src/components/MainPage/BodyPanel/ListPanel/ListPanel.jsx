@@ -1,84 +1,83 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
-import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import EventNoteIcon from '@material-ui/icons/EventNote';
-import Tooltip from '@material-ui/core/Tooltip';
-import './ListPanel.scss';
+import { Divider } from '@material-ui/core';
 import ListTypes from '../../../../constants/list';
+import Colors from '../../../../constants/colors';
+// import './ListPanel.scss';
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles({
   list: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'start',
-    paddingLeft: 20,
+    paddingLeft: 15,
+    borderLeft: '5px solid',
+    borderRight: '2px solid',
   },
+
+  todo: {
+    borderColor: Colors.todo,
+    '&$selected': {
+      backgroundColor: Colors.todoSelected,
+      '&:hover': {
+        backgroundColor: Colors.todoHover,
+      },
+    },
+  },
+
+  reminders: {
+    borderColor: Colors.reminders,
+    '&$selected': {
+      backgroundColor: Colors.remindersSelected,
+      '&:hover': {
+        backgroundColor: Colors.reminderHover,
+      },
+    },
+  },
+
+  schedule: {
+    borderColor: Colors.schedule,
+    '&$selected': {
+      backgroundColor: Colors.scheduleSelected,
+      '&:hover': {
+        backgroundColor: Colors.scheduleHover,
+      },
+    },
+  },
+
+  selected: {},
 
   listText: {
     wordBreak: 'break-word',
   },
 
-  speedDial: {
-    position: 'fixed',
-    bottom: theme.spacing(3),
-    left: theme.spacing(3),
+  itemDivider: {
+    height: '0.3px',
   },
+});
 
-  todoDialIcon: {
-    color: theme.palette.info.main,
-  },
-
-  ramindersDialIcon: {
-    color: theme.palette.warning.main,
-  },
-
-  scheduleDialIcon: {
-    color: theme.palette.success.main,
-  },
-}));
-
-const mainColors = {
-  todo: '#115293',
-  reminders: '#d32f2f',
-  schedule: '#388e3c',
-};
-
-const actions = [
-  { icon: <ViewListIcon style={{ color: mainColors.todo }} />, name: 'To-do list' },
-  { icon: <NotificationsActiveIcon style={{ color: mainColors.reminders }} />, name: 'Reminders' },
-  { icon: <EventNoteIcon style={{ color: mainColors.schedule }} />, name: 'Schedule' },
-];
-
-export default function ListPanel() {
-  const [selectedList, setSelectedList] = React.useState('list1');
-  const [speedDialState, setSpeedDialState] = React.useState(false);
+export default function ListPanel(props) {
   const styleClasses = useStyle();
-
-  const onChangeCurrentList = (event, newValue) => {
-    setSelectedList(newValue);
-  };
-
-  const toggleDial = () => {
-    setSpeedDialState(!speedDialState);
-  };
+  const { lists, onChangeList, selectedList } = props;
 
   const listComponents = () => {
     return (
-      lists.map((list, index) => (
+      lists.map((list) => (
         <ListItem
           button
-          className={styleClasses.list}
+          classes={{
+            root: styleClasses.list,
+            selected: styleClasses.selected,
+          }}
+          className={`${styleClasses.list} ${styleClasses.schedule}`}
           key={list.id}
           selected={selectedList === list.id}
+          onClick={() => onChangeList(list.id)}
         >
           <ListItemText
             className={styleClasses.listText}
@@ -88,6 +87,7 @@ export default function ListPanel() {
               </Typography>
             )}
           />
+          <Divider className={styleClasses.itemDivider} />
         </ListItem>
       ))
     );
@@ -96,29 +96,15 @@ export default function ListPanel() {
   return (
     <div className="list-panel">
       <List>
+        <Divider className={styleClasses.itemDivider} />
         {listComponents()}
-        <Divider />
       </List>
-      <Tooltip title="Add new" placement="right-end">
-        <SpeedDial
-          ariaLabel="SpeedDial example"
-          className={styleClasses.speedDial}
-          icon={<SpeedDialIcon />}
-          onClose={toggleDial}
-          onOpen={toggleDial}
-          open={speedDialState}
-          direction="up"
-        >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              onClick={toggleDial}
-            />
-          ))}
-        </SpeedDial>
-      </Tooltip>
     </div>
   );
 }
+
+ListPanel.propTypes = {
+  lists: PropTypes.arrayOf(Object).isRequired,
+  onChangeList: PropTypes.func.isRequired,
+  selectedList: PropTypes.string.isRequired,
+};
