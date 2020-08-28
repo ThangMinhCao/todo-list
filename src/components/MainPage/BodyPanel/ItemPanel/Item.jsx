@@ -92,12 +92,18 @@ class Item extends React.Component {
   }
 
   render() {
+    const
+      {
+        editting, content, finishButtonClassName,
+        textClassName, endButtonsCollapsed,
+      } = this.state;
+
     return (
-      <ListItem className="item" key={this.state.content}>
+      <ListItem className="item" key={content}>
         <Paper className="paper" elevation={3}>
           <div className="button-field">
             <ButtonBase
-              className={this.state.finishButtonClassName}
+              className={finishButtonClassName}
               // onClick={() => this.props.onClickFinished(this.props.id)}
               onClick={this.onClickFinished}
             >
@@ -109,16 +115,16 @@ class Item extends React.Component {
             className="item-text-box"
             primary={(
               <Typography
-                className={this.state.textClassName}
+                className={textClassName}
               >
-                {this.state.content === '' ? 'Empty Item' : this.state.content}
+                {content === '' ? 'Empty Item' : content}
               </Typography>
             )}
           />
           <div className="end-button-field">
             <ButtonBase
               className={
-                this.state.endButtonsCollapsed
+                endButtonsCollapsed
                   ? 'modify-button-collapsed'
                   : 'modify-button'
               }
@@ -127,7 +133,7 @@ class Item extends React.Component {
             >
               <EditIcon
                 className={
-                  this.state.endButtonsCollapsed
+                  endButtonsCollapsed
                     ? 'edit-icon-collapsed'
                     : 'edit-icon'
                 }
@@ -135,14 +141,14 @@ class Item extends React.Component {
             </ButtonBase>
             <ButtonBase
               className={
-                this.state.endButtonsCollapsed
+                endButtonsCollapsed
                   ? 'delete-button-collapsed'
                   : 'delete-button'
               }
               onClick={() => this.props.deleteSelf(this.props.id)}
             >
               <DeleteOutlineIcon
-                className={this.state.endButtonsCollapsed
+                className={endButtonsCollapsed
                   ? 'delete-icon-collapsed'
                   : 'delete-icon'}
               />
@@ -154,7 +160,7 @@ class Item extends React.Component {
               onClick={this.onClickExpandEndButton}
             >
               {
-                this.state.endButtonsCollapsed
+                endButtonsCollapsed
                   ? <ArrowLeftIcon className="expand-icon" />
                   : <ArrowRightIcon className="expand-icon" />
               }
@@ -166,7 +172,7 @@ class Item extends React.Component {
           maxWidth="sm"
           fullWidth
           onClose={this.handleCloseEditDialog}
-          open={this.state.editting}
+          open={editting}
           aria-labelledby="dialog-title"
         >
           <DialogTitle id="dialog-title">Edit Item</DialogTitle>
@@ -180,7 +186,7 @@ class Item extends React.Component {
               rowsMax={5}
               rows={5}
               label="New content"
-              defaultValue={this.state.content}
+              defaultValue={content}
               onChange={(event) => { this.handleNewContent(event.target.value); }}
             />
           </DialogContent>

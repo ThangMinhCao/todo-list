@@ -1,36 +1,27 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
+import { v4 as uuidv4 } from 'uuid';
 import './BodyPanel.scss';
 import ItemPanel from './ItemPanel/ItemPanel';
 import ListPanel from './ListPanel/ListPanel';
 // import AddItemField from './ListPanel/AddItemField';
 
-class BodyPanel extends React.Component {
-  constructor() {
-    super();
-    // this.listPanel = React.createRef();
-    this.state = ({
-      // todoLists: {},
-    });
-  }
+export default function BodyPanel() {
+  const [lists, setLists] = React.useState([{ id: 'list1', name: 'List 1' }]);
 
-  onAddList = (list) => {
-    this.listPanel.current.onAddContent(list);
-  }
+  const onAddList = (listName, listType) => {
+    const listID = uuidv4();
+    setLists([...lists, { id: listID, name: listName, type: listType }]);
+  };
 
-  render() {
-    return (
-      <div className="container">
-        <ListPanel />
-        <Divider orientation="vertical" className="divider" />
-        {/* eslint-disable-next-line no-return-assign */}
-        <ItemPanel />
-      </div>
-    );
-  }
+  return (
+    <>
+      <ListPanel lists={lists} />
+      <Divider orientation="vertical" className="divider" />
+      <ItemPanel />
+    </>
+  );
 }
 
 BodyPanel.propTypes = {
 };
-
-export default BodyPanel;
