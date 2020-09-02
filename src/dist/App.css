@@ -1,0 +1,15 @@
+.main-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+}
+.main-page .top-bar {
+  flex: 0 1 50px;
+}
+.main-page .app-body {
+  position: relative;
+  flex: 1 1 auto;
+  max-height: 100vh;
+  overflow: hidden;
+}

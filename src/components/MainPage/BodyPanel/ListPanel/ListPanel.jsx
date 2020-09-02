@@ -5,12 +5,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { Divider } from '@material-ui/core';
 import ListTypes from '../../../../constants/list';
 import Colors from '../../../../constants/colors';
 // import './ListPanel.scss';
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) => ({
   list: {
     display: 'flex',
     flexDirection: 'column',
@@ -18,10 +17,13 @@ const useStyle = makeStyles({
     paddingLeft: 15,
     borderLeft: '5px solid',
     borderRight: '2px solid',
+    borderTop: `1px solid ${theme.palette.divider}`,
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
 
   todo: {
-    borderColor: Colors.todo,
+    borderLeftColor: Colors.todo,
+    borderRightColor: Colors.todo,
     '&$selected': {
       backgroundColor: Colors.todoSelected,
       '&:hover': {
@@ -31,7 +33,8 @@ const useStyle = makeStyles({
   },
 
   reminders: {
-    borderColor: Colors.reminders,
+    borderLeftColor: Colors.reminders,
+    borderRightColor: Colors.reminders,
     '&$selected': {
       backgroundColor: Colors.remindersSelected,
       '&:hover': {
@@ -41,7 +44,8 @@ const useStyle = makeStyles({
   },
 
   schedule: {
-    borderColor: Colors.schedule,
+    borderLeftColor: Colors.schedule,
+    borderRightColor: Colors.schedule,
     '&$selected': {
       backgroundColor: Colors.scheduleSelected,
       '&:hover': {
@@ -56,16 +60,40 @@ const useStyle = makeStyles({
     wordBreak: 'break-word',
   },
 
-  itemDivider: {
-    height: '0.3px',
+  emptyText: {
+    flex: 1,
+    height: '40vh',
+    display: 'flex',
+    flexDirection: 'column',
+    color: theme.palette.text.disabled,
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 'calc(0.4vh + 0.4vw + 15px)',
   },
-});
+}));
 
 export default function ListPanel(props) {
   const styleClasses = useStyle();
   const { lists, onChangeList, selectedList } = props;
 
-  const listComponents = () => {
+  const getClassNameByType = (listType) => {
+    if (listType === ListTypes.TODO) {
+      return styleClasses.todo;
+    }
+    if (listType === ListTypes.REMINDERS) {
+      return styleClasses.reminders;
+    }
+    return styleClasses.schedule;
+  };
+
+  const generateLists = () => {
+    if (!Array.isArray(lists) || !lists.length) {
+      return (
+        <Typography className={styleClasses.emptyText} variant="h6">
+          Empty collection
+        </Typography>
+      );
+    }
     return (
       lists.map((list) => (
         <ListItem
@@ -74,7 +102,7 @@ export default function ListPanel(props) {
             root: styleClasses.list,
             selected: styleClasses.selected,
           }}
-          className={`${styleClasses.list} ${styleClasses.schedule}`}
+          className={`${styleClasses.list} ${getClassNameByType(list.type)}`}
           key={list.id}
           selected={selectedList === list.id}
           onClick={() => onChangeList(list.id)}
@@ -87,7 +115,6 @@ export default function ListPanel(props) {
               </Typography>
             )}
           />
-          <Divider className={styleClasses.itemDivider} />
         </ListItem>
       ))
     );
@@ -96,8 +123,7 @@ export default function ListPanel(props) {
   return (
     <div className="list-panel">
       <List>
-        <Divider className={styleClasses.itemDivider} />
-        {listComponents()}
+        {generateLists()}
       </List>
     </div>
   );

@@ -7,11 +7,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import EventNoteIcon from '@material-ui/icons/EventNote';
-// import { v4 as uuidv4 } from 'uuid';
 import './BodyPanel.scss';
-import ItemPanel from './ItemPanel/ItemPanel';
+import TodoPanel from './TodoPanel/TodoPanel';
 import ListPanel from './ListPanel/ListPanel';
 import Colors from '../../../constants/colors';
+import ListTypes from '../../../constants/list';
 
 const useStyle = makeStyles((theme) => ({
   speedDial: {
@@ -40,9 +40,17 @@ const actions = [
 ];
 
 export default function BodyPanel() {
-  const [lists, setLists] = React.useState([{ id: 'list1', name: 'List 1' }, { id: 'list2', name: 'List 2'}]);
+  const [lists, setLists] = React.useState([
+    {
+      id: 'list1', name: 'List 1', type: ListTypes.TODO, items: [],
+    },
+    {
+      id: 'list2', name: 'List 2', type: ListTypes.TODO, items: [],
+    },
+  ]);
   const [speedDialState, setSpeedDialState] = React.useState(false);
-  const [selectedList, setSelectedList] = React.useState('');
+  // TODO
+  const [selectedListKey, setSelectedList] = React.useState('');
   const styleClasses = useStyle();
 
   // const onAddList = (listName, listType) => {
@@ -50,18 +58,68 @@ export default function BodyPanel() {
   //   setLists([...lists, { id: listID, name: listName, type: listType }]);
   // };
 
+  const onAddItem = (item) => {
+    const newList = lists.map((list) => {
+      if (list.id !== selectedListKey) {
+        return list;
+      }
+      return {
+        id: list.id, name: list.name, type: list.type, items: [...list.items, item],
+      };
+    });
+    setLists(newList);
+  };
+
+  const onDeleteItem = (itemID) => {
+    setLists(lists.map((list) => {
+      if (list.id !== selectedListKey) {
+        return list;
+      }
+      return { ...list, items: list.items.filter((item) => item.id !== itemID) };
+    }));
+  };
+
   const toggleDial = () => {
     setSpeedDialState(!speedDialState);
   };
 
   const onChangeList = (listID) => {
+    // const foundList = lists.find((list) => list.id === listID);
     setSelectedList(listID);
+  };
+
+  const generateSelectedComponent = () => {
+    const selectedList = lists.find((list) => list.id === selectedListKey);
+    if (!selectedListKey) {
+      return <div />;
+    }
+    if (selectedList.type === ListTypes.TODO) {
+      return (
+        <TodoPanel
+          items={selectedList.items}
+          onAddItem={onAddItem}
+          onDeleteItem={onDeleteItem}
+        />
+      );
+    }
+
+    if (selectedListKey.type === ListTypes.REMINDERS) {
+      return (
+        // <TodoPanel list={selectedList.list} />
+        <div />
+      );
+    }
+    return (
+      // <TodoPanel list={selectedList.list} />
+      <div />
+    );
   };
 
   return (
     <div className="container">
-      <ListPanel lists={lists} selectedList={selectedList} onChangeList={onChangeList} />
-      <ItemPanel />
+      <ListPanel lists={lists} selectedList={selectedListKey} onChangeList={onChangeList} />
+      {/* <ListPanel lists={lists} selectedList={selectedListKey} onChangeList={onAddItem} /> */}
+      {generateSelectedComponent()}
       <Tooltip title="Add new" placement="right-end">
         <SpeedDial
           ariaLabel="SpeedDial example"

@@ -20,7 +20,6 @@ export default class AddItemField extends React.Component {
       loading: false,
       translating: false,
     };
-    this.onClickAdd = props.addTodoItem;
     this.translateText = this.translateText.bind(this);
   }
 
@@ -28,7 +27,7 @@ export default class AddItemField extends React.Component {
     if (this.state.translating && this.state.todoContent) {
       await this.translateText();
     }
-    this.onClickAdd(this.state.todoContent);
+    this.props.addTodoItem(this.state.todoContent);
     this.onClearAddField();
   }
 
