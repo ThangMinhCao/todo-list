@@ -13,22 +13,24 @@
       font-weight: bold;
     }
 
-    .button-first, .button-not-finished, .button-finished {
+    .button-not-finished, .button-finished {
       position: absolute;
       top: 0px;
       left: 5px;
       border-radius: 20px;
     }
-    .button-first, .button-not-finished {
+    .button-not-finished {
       background-color: #d1d9ff;
-      transition: box-shadow 0.4s;
-      transition: background-color 0.4s ease;
+      border: 2px solid white;
+      transition: box-shadow 0.3s;
+      transition: background-color 0.2s ease-out;
     }
 
     .button-finished {
       background-color: #3f51b5;
-      transition: background-color 0.4s ease-out;
-      transition: box-shadow 0.4s;
+      border: 2px solid white;
+      transition: background-color 0.3s ease-out;
+      transition: box-shadow 0.3s;
       box-shadow:
         0px 2px 8px -1px rgba(0,0,0,0.2),
         0px 3px 4px 0px rgba(0,0,0,0.13),
@@ -49,7 +51,7 @@
     padding-left: 5px;
     padding-right: 5px;
 
-    .item-text-first, .item-text-unchecked, .item-text-checked {
+    .item-text-unchecked, .item-text-checked {
       flex: 1;
       padding: 5px;
       padding-left: 10px;

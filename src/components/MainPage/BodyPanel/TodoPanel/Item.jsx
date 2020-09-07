@@ -26,13 +26,9 @@ class Item extends React.Component {
     this.state = {
       editting: false,
       content: this.props.content,
-      finished: false,
-      finishButtonClassName: 'button-first',
-      textClassName: 'item-text-first',
       endButtonsCollapsed: true,
       newContent: '',
     };
-
     this.onClickFinished = this.onClickFinished.bind(this);
     this.setContent = this.setContent.bind(this);
     this.onClickExpandEndButton = this.onClickExpandEndButton.bind(this);
@@ -55,11 +51,11 @@ class Item extends React.Component {
   }
 
   onClickFinished() {
-    this.setState((prevstate) => ({
-      finished: !prevstate.finished,
-      finishButtonClassName: !prevstate.finished ? 'button-finished' : 'button-not-finished',
-      textClassName: !prevstate.finished ? 'item-text-checked' : 'item-text-unchecked',
-    }));
+    // this.setState((prevstate) => ({
+    //   finished: !prevstate.finished,
+    //   finishButtonClassName: !prevstate.finished ? 'button-finished' : 'button-not-finished',
+    //   textClassName: !prevstate.finished ? 'item-text-checked' : 'item-text-unchecked',
+    // }));
     this.props.toggleFinished(this.props.id);
   }
 
@@ -94,8 +90,7 @@ class Item extends React.Component {
   render() {
     const
       {
-        editting, content, finishButtonClassName,
-        textClassName, endButtonsCollapsed,
+        editting, content, endButtonsCollapsed,
       } = this.state;
 
     return (
@@ -103,7 +98,7 @@ class Item extends React.Component {
         <Paper className="paper" elevation={3}>
           <div className="button-field">
             <ButtonBase
-              className={finishButtonClassName}
+              className={this.props.finished ? 'button-finished' : 'button-not-finished'}
               // onClick={() => this.props.onClickFinished(this.props.id)}
               onClick={this.onClickFinished}
             >
@@ -115,7 +110,7 @@ class Item extends React.Component {
             className="item-text-box"
             primary={(
               <Typography
-                className={textClassName}
+                className={this.props.finished ? 'item-text-checked' : 'item-text-unchecked'}
               >
                 {content === '' ? 'Empty Item' : content}
               </Typography>
@@ -207,6 +202,7 @@ class Item extends React.Component {
 Item.propTypes = {
   id: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
+  finished: PropTypes.bool.isRequired,
   deleteSelf: PropTypes.func.isRequired,
   toggleFinished: PropTypes.func.isRequired,
   toggleEmptyAlert: PropTypes.func.isRequired,

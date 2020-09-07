@@ -6,7 +6,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import InputBase from '@material-ui/core/InputBase';
 import TranslateIcon from '@material-ui/icons/Translate';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 import translate from '../../../api/translate';
 import '../BodyPanel.scss';
@@ -60,6 +59,7 @@ export default class AddItemField extends React.Component {
     try {
       // await this.onToggleLoading();
       this.onToggleLoading();
+      this.props.onLoading();
       const response = await translate.get('/text/translate',
         {
           params: {
@@ -73,7 +73,7 @@ export default class AddItemField extends React.Component {
       this.setState({
         todoContent: response.data.outputs[0].output,
       });
-      // console.log(response);
+      this.props.onLoading();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error);
@@ -91,8 +91,6 @@ export default class AddItemField extends React.Component {
   render() {
     return (
       <div style={{ width: '100vw' }}>
-        {this.state.loading ? <LinearProgress className="progress" /> : <div />}
-        {/* <LinearProgress className="progress" /> */}
         <Paper className="add-item-field" elevation={8}>
           <IconButton
             className="button"
@@ -142,4 +140,5 @@ export default class AddItemField extends React.Component {
 
 AddItemField.propTypes = {
   addTodoItem: PropTypes.func.isRequired,
+  onLoading: PropTypes.func.isRequired,
 };

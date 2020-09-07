@@ -15,19 +15,24 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'start',
     paddingLeft: 15,
-    borderLeft: '5px solid',
-    borderRight: '2px solid',
+    // borderLeft: '5px solid',
+    // borderRight: '5px solid',
     borderTop: `1px solid ${theme.palette.divider}`,
     borderBottom: `1px solid ${theme.palette.divider}`,
+    background: 'white',
+    
   },
 
   todo: {
     borderLeftColor: Colors.todo,
     borderRightColor: Colors.todo,
+    '&:hover': {
+      backgroundColor: Colors.hover,
+    },
     '&$selected': {
       backgroundColor: Colors.todoSelected,
       '&:hover': {
-        backgroundColor: Colors.todoHover,
+        backgroundColor: Colors.todoSelected,
       },
     },
   },

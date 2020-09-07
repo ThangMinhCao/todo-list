@@ -9,7 +9,9 @@ import Item from './Item';
 import '../BodyPanel.scss';
 import AddItemField from './AddItemField';
 
-export default function TodoPanel({ items, onAddItem, onDeleteItem }) {
+export default function TodoPanel({
+  items, onAddItem, onDeleteItem, onToggleFinished, onLoading,
+}) {
   const [failedSnackBarOpened, setFailedSnackBarOpened] = React.useState(false);
   const [successSnackBarOpened, setSuccessSnackBarOpened] = React.useState(false);
 
@@ -22,11 +24,7 @@ export default function TodoPanel({ items, onAddItem, onDeleteItem }) {
   };
 
   const toggleFinished = (id) => {
-    // this.setState((prevState) => ({
-    //   todoItems: prevState.todoItems.map(
-    //     (item) => (item[0].key === id ? [item[0], !item[1]] : item),
-    //   ),
-    // }));
+    onToggleFinished(id);
   };
 
   const onAddContent = (text) => {
@@ -47,10 +45,10 @@ export default function TodoPanel({ items, onAddItem, onDeleteItem }) {
     return (
       <Item
         id={itemID}
-        deleteSelf={onDeleteItem}
-        key={itemID}
         content={text}
         finished={finished}
+        deleteSelf={onDeleteItem}
+        key={itemID}
         toggleFinished={toggleFinished}
         toggleEmptyAlert={toggleFailedSnackbar}
         toggleSuccessAlert={toggleSuccessSnackbar}
@@ -59,7 +57,14 @@ export default function TodoPanel({ items, onAddItem, onDeleteItem }) {
   };
 
   return (
-    <FlipMove enterAnimation="fade" leaveAnimation="fade" appearAnimation="fade" className="item-panel">
+    <FlipMove
+      enterAnimation="fade"
+      leaveAnimation="none"
+      delay={50}
+      duration={105}
+      appearAnimation="fade"
+      className="item-panel"
+    >
       <Snackbar
         open={failedSnackBarOpened}
         message="Please insert the item's content"
@@ -77,10 +82,8 @@ export default function TodoPanel({ items, onAddItem, onDeleteItem }) {
         <MuiAlert severity="success">Content edited successfully!</MuiAlert>
       </Snackbar>
       <ListItem>
-        <AddItemField className="add-item-field" addTodoItem={onAddContent} />
-        {/* <AddItemField className="add-item-field" addTodoItem={() => onAddItem(2)} /> */}
+        <AddItemField onLoading={onLoading} className="add-item-field" addTodoItem={onAddContent} />
       </ListItem>
-      {/* {this.state.todoItems.sort((a, b) => a[1] - b[1]).map((item) => item[0])} */}
       {items.sort((a, b) => a.finished - b.finished)
         .map((item) => renderItem(item.id, item.content, item.finished))}
     </FlipMove>
@@ -91,4 +94,6 @@ TodoPanel.propTypes = {
   items: PropTypes.arrayOf(Object).isRequired,
   onAddItem: PropTypes.func.isRequired,
   onDeleteItem: PropTypes.func.isRequired,
+  onToggleFinished: PropTypes.func.isRequired,
+  onLoading: PropTypes.func.isRequired,
 };
