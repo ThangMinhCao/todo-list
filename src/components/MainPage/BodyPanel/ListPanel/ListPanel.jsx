@@ -66,10 +66,10 @@ const useStyle = makeStyles((theme) => ({
 
   emptyText: {
     flex: 1,
-    height: '40vh',
+    height: '60vh',
     display: 'flex',
     flexDirection: 'column',
-    color: theme.palette.text.disabled,
+    color: 'rgba(255, 255, 255, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 'calc(0.4vh + 0.4vw + 15px)',

@@ -49,22 +49,8 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const actions = [
-  { icon: <ViewListIcon style={{ color: Colors.todo }} />, name: 'To-do list' },
-  { icon: <NotificationsActiveIcon style={{ color: Colors.reminders }} />, name: 'Reminders' },
-  { icon: <EventNoteIcon style={{ color: Colors.schedule }} />, name: 'Schedule' },
-];
-
 export default function BodyPanel() {
-  const [lists, setLists] = React.useState([
-    {
-      id: 'list1', name: 'List 1', type: ListTypes.TODO, items: [],
-    },
-
-    {
-      id: 'list2', name: 'List 2', type: ListTypes.TODO, items: [],
-    },
-  ]);
+  const [lists, setLists] = React.useState([]);
   const [speedDialState, setSpeedDialState] = React.useState(false);
   const [selectedListKey, setSelectedList] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -75,8 +61,16 @@ export default function BodyPanel() {
 
   const onAddTodoList = (listName, listType) => {
     const listID = uuidv4();
-    setLists([...lists, { id: listID, name: listName, type: listType }]);
+    setLists([...lists, {
+      id: listID, name: listName, type: listType, items: [],
+    }]);
   };
+
+  const actions = [
+    { function: onAddTodoList, icon: <ViewListIcon style={{ color: Colors.todo }} />, name: 'To-do list' },
+    // { function: onAddTodoList, icon: <NotificationsActiveIcon style={{ color: Colors.reminders }} />, name: 'Reminders' },
+    // { function: onAddTodoList, icon: <EventNoteIcon style={{ color: Colors.schedule }} />, name: 'Schedule' },
+  ];
 
   const onToggleLoading = () => {
     setLoading(!loading);
@@ -218,7 +212,7 @@ export default function BodyPanel() {
                 key={action.name}
                 icon={action.icon}
                 tooltipTitle={action.name}
-                onClick={toggleDial}
+                onClick={() => action.function('TodoList', ListTypes.TODO)}
               />
             ))}
           </SpeedDial>
