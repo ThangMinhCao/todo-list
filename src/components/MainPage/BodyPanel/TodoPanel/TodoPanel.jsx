@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+
 import FlipMove from 'react-flip-move';
 import { v4 as uuidv4 } from 'uuid';
 import Item from './Item';
@@ -10,7 +11,7 @@ import '../BodyPanel.scss';
 import AddItemField from './AddItemField';
 
 export default function TodoPanel({
-  items, onAddItem, onDeleteItem, onToggleFinished, onLoading,
+  items, onAddItem, onDeleteItem, onToggleFinished, onLoading, onEditingItem,
 }) {
   const [failedSnackBarOpened, setFailedSnackBarOpened] = React.useState(false);
   const [successSnackBarOpened, setSuccessSnackBarOpened] = React.useState(false);
@@ -52,6 +53,7 @@ export default function TodoPanel({
         toggleFinished={toggleFinished}
         toggleEmptyAlert={toggleFailedSnackbar}
         toggleSuccessAlert={toggleSuccessSnackbar}
+        onEditing={onEditingItem}
       />
     );
   };
@@ -96,4 +98,5 @@ TodoPanel.propTypes = {
   onDeleteItem: PropTypes.func.isRequired,
   onToggleFinished: PropTypes.func.isRequired,
   onLoading: PropTypes.func.isRequired,
+  onEditingItem: PropTypes.func.isRequired,
 };

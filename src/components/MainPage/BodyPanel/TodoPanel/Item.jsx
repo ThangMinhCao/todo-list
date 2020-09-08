@@ -10,13 +10,6 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import Dialog from '@material-ui/core/Dialog';
-import TextField from '@material-ui/core/TextField';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-
 import './Item.scss';
 
 class Item extends React.Component {
@@ -24,24 +17,16 @@ class Item extends React.Component {
     super(props);
 
     this.state = {
-      editting: false,
       content: this.props.content,
       endButtonsCollapsed: true,
-      newContent: '',
     };
     this.onClickFinished = this.onClickFinished.bind(this);
-    this.setContent = this.setContent.bind(this);
     this.onClickExpandEndButton = this.onClickExpandEndButton.bind(this);
     this.onClickEdit = this.onClickEdit.bind(this);
-    this.handleCloseEditDialog = this.handleCloseEditDialog.bind(this);
-    this.onFinishedDialog = this.onFinishedDialog.bind(this);
   }
 
   onClickEdit() {
-    this.setState({
-      editting: true,
-      endButtonsCollapsed: true,
-    });
+    this.props.onEditing(this.props.id, this.state.content);
   }
 
   onClickExpandEndButton() {
@@ -51,55 +36,25 @@ class Item extends React.Component {
   }
 
   onClickFinished() {
-    // this.setState((prevstate) => ({
-    //   finished: !prevstate.finished,
-    //   finishButtonClassName: !prevstate.finished ? 'button-finished' : 'button-not-finished',
-    //   textClassName: !prevstate.finished ? 'item-text-checked' : 'item-text-unchecked',
-    // }));
     this.props.toggleFinished(this.props.id);
-  }
-
-  onFinishedDialog() {
-    this.setContent(this.state.newContent);
-    this.props.toggleSuccessAlert();
-    this.handleCloseEditDialog();
-  }
-
-  setContent(newContent) {
-    if (newContent === '') {
-      this.props.toggleEmptyAlert();
-    } else {
-      this.setState({
-        content: newContent,
-      });
-    }
-  }
-
-  handleCloseEditDialog() {
-    this.setState({
-      editting: false,
-    });
-  }
-
-  handleNewContent(content) {
-    this.setState({
-      newContent: content,
-    });
   }
 
   render() {
     const
       {
-        editting, content, endButtonsCollapsed,
+        endButtonsCollapsed,
       } = this.state;
+
+    const {
+      id, finished, content, deleteSelf,
+    } = this.props;
 
     return (
       <ListItem className="item" key={content}>
         <Paper className="paper" elevation={3}>
           <div className="button-field">
             <ButtonBase
-              className={this.props.finished ? 'button-finished' : 'button-not-finished'}
-              // onClick={() => this.props.onClickFinished(this.props.id)}
+              className={finished ? 'button-finished' : 'button-not-finished'}
               onClick={this.onClickFinished}
             >
               <CheckIcon className="icon" />
@@ -110,7 +65,7 @@ class Item extends React.Component {
             className="item-text-box"
             primary={(
               <Typography
-                className={this.props.finished ? 'item-text-checked' : 'item-text-unchecked'}
+                className={finished ? 'item-text-checked' : 'item-text-unchecked'}
               >
                 {content === '' ? 'Empty Item' : content}
               </Typography>
@@ -140,7 +95,7 @@ class Item extends React.Component {
                   ? 'delete-button-collapsed'
                   : 'delete-button'
               }
-              onClick={() => this.props.deleteSelf(this.props.id)}
+              onClick={() => deleteSelf(id)}
             >
               <DeleteOutlineIcon
                 className={endButtonsCollapsed
@@ -162,38 +117,6 @@ class Item extends React.Component {
             </ButtonBase>
           </div>
         </Paper>
-
-        <Dialog
-          maxWidth="sm"
-          fullWidth
-          onClose={this.handleCloseEditDialog}
-          open={editting}
-          aria-labelledby="dialog-title"
-        >
-          <DialogTitle id="dialog-title">Edit Item</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              multiline
-              rowsMax={5}
-              rows={5}
-              label="New content"
-              defaultValue={content}
-              onChange={(event) => { this.handleNewContent(event.target.value); }}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleCloseEditDialog} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.onFinishedDialog} color="primary">
-              Finished
-            </Button>
-          </DialogActions>
-        </Dialog>
       </ListItem>
     );
   }
@@ -207,6 +130,7 @@ Item.propTypes = {
   toggleFinished: PropTypes.func.isRequired,
   toggleEmptyAlert: PropTypes.func.isRequired,
   toggleSuccessAlert: PropTypes.func.isRequired,
+  onEditing: PropTypes.func.isRequired,
 };
 
 export default Item;

@@ -8,6 +8,13 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Dialog from '@material-ui/core/Dialog';
+import TextField from '@material-ui/core/TextField';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+
 import { v4 as uuidv4 } from 'uuid';
 import './BodyPanel.scss';
 import TodoPanel from './TodoPanel/TodoPanel';
@@ -61,6 +68,9 @@ export default function BodyPanel() {
   const [speedDialState, setSpeedDialState] = React.useState(false);
   const [selectedListKey, setSelectedList] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [editing, setEditting] = React.useState(false);
+  const [itemEditingNewContent, setItemEdittingNewContent] = React.useState('');
+  const [editingItemID, setEditingItemID] = React.useState('');
   const styleClasses = useStyle();
 
   const onAddTodoList = (listName, listType) => {
@@ -120,6 +130,38 @@ export default function BodyPanel() {
     setLists(newList);
   };
 
+  const handleCloseEditDialog = () => {
+    setItemEdittingNewContent('');
+    setEditting(false);
+  };
+
+  const handleFinishEditItem = () => {
+    setLists(lists.map((list) => {
+      if (list.id !== selectedListKey) {
+        return list;
+      }
+      return {
+        ...list,
+        items: list.items.map((item) => {
+          if (item.id !== editingItemID) {
+            return item;
+          }
+          // console.log({ ...item, content: itemEditingNewContent });
+          // console.log(itemEditingNewContent);
+          return { ...item, content: itemEditingNewContent };
+          // return { ...item, finished: true };
+        }),
+      };
+    }));
+    handleCloseEditDialog();
+  };
+
+  const handleOpenEditDialog = (itemID, currentContent) => {
+    setEditingItemID(itemID);
+    setItemEdittingNewContent(currentContent);
+    setEditting(true);
+  };
+
   const generateSelectedComponent = () => {
     const selectedList = lists.find((list) => list.id === selectedListKey);
     if (!selectedListKey) {
@@ -133,6 +175,7 @@ export default function BodyPanel() {
           onDeleteItem={onDeleteItem}
           onToggleFinished={onToggleFinished}
           onLoading={onToggleLoading}
+          onEditingItem={handleOpenEditDialog}
         />
       );
     }
@@ -153,8 +196,12 @@ export default function BodyPanel() {
     <>
       <LinearProgress className={styleClasses.loadingBar} hidden={!loading} />
       <div className="container">
-        <ListPanel lists={lists} selectedList={selectedListKey} onChangeList={onChangeList} />
-        {/* <ListPanel lists={lists} selectedList={selectedListKey} onChangeList={onAddItem} /> */}
+        <ListPanel
+          lists={lists}
+          selectedList={selectedListKey}
+          onChangeList={onChangeList}
+          onClickEdittingItem={handleOpenEditDialog}
+        />
         {generateSelectedComponent()}
         <Tooltip title="Add new" placement="right-end">
           <SpeedDial
@@ -177,6 +224,37 @@ export default function BodyPanel() {
           </SpeedDial>
         </Tooltip>
       </div>
+      <Dialog
+        maxWidth="sm"
+        fullWidth
+        onClose={handleCloseEditDialog}
+        open={editing}
+        aria-labelledby="dialog-title"
+      >
+        <DialogTitle id="dialog-title">Edit Item</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            multiline
+            rowsMax={5}
+            rows={5}
+            label="New content"
+            value={itemEditingNewContent}
+            onChange={(event) => { setItemEdittingNewContent(event.target.value); }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEditDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleFinishEditItem} color="primary">
+            Finished
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

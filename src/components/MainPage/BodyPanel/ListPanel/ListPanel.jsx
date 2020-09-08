@@ -20,7 +20,6 @@ const useStyle = makeStyles((theme) => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     borderBottom: `1px solid ${theme.palette.divider}`,
     background: 'white',
-    
   },
 
   todo: {

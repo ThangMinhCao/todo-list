@@ -30,6 +30,12 @@ export default class AddItemField extends React.Component {
     this.onClearAddField();
   }
 
+  onSubmitContent = (event) => {
+    if (event.ctrlKey && event.keyCode === 13) {
+      this.onAddItem();
+    }
+  }
+
   handleTextFieldChange = (value) => {
     this.setState({
       todoContent: value.target.value,
@@ -102,14 +108,17 @@ export default class AddItemField extends React.Component {
             <AddIcon />
           </IconButton>
           <InputBase
+            type="form"
             rows={4}
             rowsMax={4}
             color="primary"
             className="input"
-            placeholder="Enter item content"
+            placeholder="Enter item's content (Click '+' button or Ctrl+Enter to add)"
             multiline
             value={this.state.todoContent}
             onChange={this.handleTextFieldChange}
+            onSubmit={this.onSubmitContent}
+            onKeyDown={this.onSubmitContent}
           />
           <Tooltip arrow title={this.state.translating ? 'Translation on add enabled' : 'Translation on add disabled'}>
             <IconButton

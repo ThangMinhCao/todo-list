@@ -14,9 +14,9 @@ const AppBarStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    fontSize: 30,
+    fontFamily: 'Asap, sans-serif',
+    color: 'white',
     flexGrow: 1,
-    marginRight: theme.spacing(2),
   },
 }));
 
@@ -27,7 +27,7 @@ export default function AppHeader() {
       <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
         <MenuIcon style={{ color: 'white' }} />
       </IconButton>
-      <Typography color="primary" align="right" variant="h5" className={classes.title}>
+      <Typography align="right" variant="h5" className={classes.title}>
         Todo List
       </Typography>
       {/* <Button color="inherit">Login</Button> */}
