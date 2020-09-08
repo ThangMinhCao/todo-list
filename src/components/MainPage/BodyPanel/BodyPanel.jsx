@@ -1,12 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
-import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import Tooltip from '@material-ui/core/Tooltip';
-import ViewListIcon from '@material-ui/icons/ViewList';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import EventNoteIcon from '@material-ui/icons/EventNote';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
@@ -14,16 +8,27 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+// import ViewListIcon from '@material-ui/icons/ViewList';
+// import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+// import EventNoteIcon from '@material-ui/icons/EventNote';
+// import SpeedDial from '@material-ui/lab/SpeedDial';
+// import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
+// import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 import { v4 as uuidv4 } from 'uuid';
 import './BodyPanel.scss';
 import TodoPanel from './TodoPanel/TodoPanel';
 import ListPanel from './ListPanel/ListPanel';
-import Colors from '../../../constants/colors';
+// import Colors from '../../../constants/colors';
 import ListTypes from '../../../constants/list';
 
 const useStyle = makeStyles((theme) => ({
-  speedDial: {
+  addButton: {
+    backgroundColor: 'white',
     position: 'fixed',
     bottom: theme.spacing(3),
     left: theme.spacing(3),
@@ -51,34 +56,53 @@ const useStyle = makeStyles((theme) => ({
 
 export default function BodyPanel() {
   const [lists, setLists] = React.useState([]);
-  const [speedDialState, setSpeedDialState] = React.useState(false);
-  const [selectedListKey, setSelectedList] = React.useState('');
+  const [selectedListKey, setSelectedListKey] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [editing, setEditting] = React.useState(false);
-  const [itemEditingNewContent, setItemEdittingNewContent] = React.useState('');
+  const [dialogContent, setDialogContent] = React.useState('');
   const [editingItemID, setEditingItemID] = React.useState('');
-  const styleClasses = useStyle();
+  const [addingNewList, setAddingNewList] = React.useState(false);
+  const [failedSnackBarOpened, setFailedSnackBarOpened] = React.useState(false);
+  const [successSnackBarOpened, setSuccessSnackBarOpened] = React.useState(false);
 
-  const onAddTodoList = (listName, listType) => {
+  const styleClasses = useStyle();
+  // const [speedDialState, setSpeedDialState] = React.useState(false);
+
+  const onAddTodoList = (listType) => {
     const listID = uuidv4();
     setLists([...lists, {
-      id: listID, name: listName, type: listType, items: [],
+      id: listID, name: dialogContent, type: listType, items: [],
     }]);
   };
 
-  const actions = [
-    { function: onAddTodoList, icon: <ViewListIcon style={{ color: Colors.todo }} />, name: 'To-do list' },
-    // { function: onAddTodoList, icon: <NotificationsActiveIcon style={{ color: Colors.reminders }} />, name: 'Reminders' },
-    // { function: onAddTodoList, icon: <EventNoteIcon style={{ color: Colors.schedule }} />, name: 'Schedule' },
-  ];
+  const onDeleteTodoList = (listID) => {
+    setLists(lists.filter((list) => list.id !== listID));
+    setSelectedListKey('');
+  };
+
+  // const actions = [
+  // { function: onAddTodoList,
+  // icon: <ViewListIcon style={{ color: Colors.todo }} />, name: 'To-do list' },
+  // { function: onAddTodoList,
+  // icon:<NotificationsActiveIcon style={{ color: Colors.reminders }} />, name: 'Reminders' },
+  // { function: onAddTodoList,
+  // icon: <EventNoteIcon style={{ color: Colors.schedule }} />, name: 'Schedule' },
+  // ];
+  const toggleFailedSnackbar = () => {
+    setFailedSnackBarOpened(!failedSnackBarOpened);
+  };
+
+  const toggleSuccessSnackbar = () => {
+    setSuccessSnackBarOpened(!successSnackBarOpened);
+  };
 
   const onToggleLoading = () => {
     setLoading(!loading);
   };
 
-  const onAddItem = (item) => {
+  const onAddItem = (listID, item) => {
     const newList = lists.map((list) => {
-      if (list.id !== selectedListKey) {
+      if (list.id !== listID) {
         return list;
       }
       return {
@@ -97,13 +121,12 @@ export default function BodyPanel() {
     }));
   };
 
-  const toggleDial = () => {
-    setSpeedDialState(!speedDialState);
-  };
+  // const toggleDial = () => {
+  //   setSpeedDialState(!speedDialState);
+  // };
 
   const onChangeList = (listID) => {
-    // const foundList = lists.find((list) => list.id === listID);
-    setSelectedList(listID);
+    setSelectedListKey(listID);
   };
 
   const onToggleFinished = (itemID) => {
@@ -125,40 +148,52 @@ export default function BodyPanel() {
   };
 
   const handleCloseEditDialog = () => {
-    setItemEdittingNewContent('');
+    setDialogContent('');
     setEditting(false);
+    setAddingNewList(false);
   };
 
-  const handleFinishEditItem = () => {
-    setLists(lists.map((list) => {
-      if (list.id !== selectedListKey) {
-        return list;
-      }
-      return {
-        ...list,
-        items: list.items.map((item) => {
-          if (item.id !== editingItemID) {
-            return item;
+  const handleFinishDialog = () => {
+    if (!dialogContent) {
+      toggleFailedSnackbar();
+    } else {
+      if (editing) {
+        setLists(lists.map((list) => {
+          if (list.id !== selectedListKey) {
+            return list;
           }
-          // console.log({ ...item, content: itemEditingNewContent });
-          // console.log(itemEditingNewContent);
-          return { ...item, content: itemEditingNewContent };
-          // return { ...item, finished: true };
-        }),
-      };
-    }));
-    handleCloseEditDialog();
+          return {
+            ...list,
+            items: list.items.map((item) => {
+              if (item.id !== editingItemID) {
+                return item;
+              }
+              return { ...item, content: dialogContent };
+            }),
+          };
+        }));
+      } else {
+        onAddTodoList(ListTypes.TODO);
+      }
+      handleCloseEditDialog();
+    }
   };
 
   const handleOpenEditDialog = (itemID, currentContent) => {
     setEditingItemID(itemID);
-    setItemEdittingNewContent(currentContent);
+    setDialogContent(currentContent);
     setEditting(true);
+  };
+
+  const handleSubmitDialog = (event) => {
+    if (event.ctrlKey && event.keyCode === 13) {
+      handleFinishDialog();
+    }
   };
 
   const generateSelectedComponent = () => {
     const selectedList = lists.find((list) => list.id === selectedListKey);
-    if (!selectedListKey) {
+    if (!selectedList) {
       return <div />;
     }
     if (selectedList.type === ListTypes.TODO) {
@@ -170,6 +205,9 @@ export default function BodyPanel() {
           onToggleFinished={onToggleFinished}
           onLoading={onToggleLoading}
           onEditingItem={handleOpenEditDialog}
+          toggleFailedSnackbar={toggleFailedSnackbar}
+          toggleSuccessSnackbar={toggleSuccessSnackbar}
+          selectedListID={selectedListKey}
         />
       );
     }
@@ -195,60 +233,73 @@ export default function BodyPanel() {
           selectedList={selectedListKey}
           onChangeList={onChangeList}
           onClickEdittingItem={handleOpenEditDialog}
+          onClickDelete={onDeleteTodoList}
         />
         {generateSelectedComponent()}
         <Tooltip title="Add new" placement="right-end">
-          <SpeedDial
-            ariaLabel="SpeedDial example"
-            className={styleClasses.speedDial}
-            icon={<SpeedDialIcon />}
-            onClose={toggleDial}
-            onOpen={toggleDial}
-            open={speedDialState}
-            direction="up"
+          <Fab
+            className={styleClasses.addButton}
+            onClick={() => setAddingNewList(true)}
+            // ariaLabel="SpeedDial example"
+            // icon={<SpeedDialIcon />}
+            // direction="up"
+            // onClose={toggleDial}
+            // onOpen={toggleDial}
+            // open={speedDialState}
           >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={() => action.function('TodoList', ListTypes.TODO)}
-              />
-            ))}
-          </SpeedDial>
+            <AddIcon color="primary" />
+          </Fab>
         </Tooltip>
       </div>
       <Dialog
         maxWidth="sm"
         fullWidth
         onClose={handleCloseEditDialog}
-        open={editing}
+        open={editing || addingNewList}
         aria-labelledby="dialog-title"
       >
-        <DialogTitle id="dialog-title">Edit Item</DialogTitle>
+        <DialogTitle id="dialog-title">{editing ? 'Edit Item' : 'Adding new To-do list'}</DialogTitle>
         <DialogContent>
           <TextField
+            // inputProps={{ maxLength: 36 }}
             autoFocus
             variant="outlined"
-            margin="dense"
+            // margin="dense"
             fullWidth
-            multiline
-            rowsMax={5}
-            rows={5}
-            label="New content"
-            value={itemEditingNewContent}
-            onChange={(event) => { setItemEdittingNewContent(event.target.value); }}
+            multiline={editing}
+            rowsMax={editing ? 5 : 1}
+            rows={editing ? 5 : 1}
+            label={editing ? 'New content' : 'List name'}
+            value={dialogContent}
+            onChange={(event) => { setDialogContent(event.target.value); }}
+            onKeyDown={handleSubmitDialog}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseEditDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleFinishEditItem} color="primary">
+          <Button onClick={handleFinishDialog} color="primary">
             Finished
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={failedSnackBarOpened}
+        message="Please insert the item's content"
+        onClose={toggleFailedSnackbar}
+        autoHideDuration={1500}
+      >
+        <MuiAlert severity="error">Empty content!</MuiAlert>
+      </Snackbar>
+      <Snackbar
+        open={successSnackBarOpened}
+        message="Edit successful"
+        onClose={toggleSuccessSnackbar}
+        autoHideDuration={1500}
+      >
+        <MuiAlert severity="success">Content edited successfully!</MuiAlert>
+      </Snackbar>
     </>
   );
 }

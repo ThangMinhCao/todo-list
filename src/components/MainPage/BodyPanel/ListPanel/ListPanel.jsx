@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import FlipMove from 'react-flip-move';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import ListTypes from '../../../../constants/list';
 import Colors from '../../../../constants/colors';
 // import './ListPanel.scss';
@@ -12,11 +14,9 @@ import Colors from '../../../../constants/colors';
 const useStyle = makeStyles((theme) => ({
   list: {
     display: 'flex',
-    flexDirection: 'column',
     alignItems: 'start',
     paddingLeft: 15,
-    // borderLeft: '5px solid',
-    // borderRight: '5px solid',
+    paddingRight: 0,
     borderTop: `1px solid ${theme.palette.divider}`,
     borderBottom: `1px solid ${theme.palette.divider}`,
     background: 'white',
@@ -69,10 +69,18 @@ const useStyle = makeStyles((theme) => ({
     height: '60vh',
     display: 'flex',
     flexDirection: 'column',
-    color: 'rgba(255, 255, 255, 0.5)',
+    color: 'rgba(255, 255, 255, 0.65)',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 'calc(0.4vh + 0.4vw + 15px)',
+  },
+
+  deleteListButton: {
+    height: '100%',
+  },
+
+  endDiv: {
+    height: 100,
   },
 }));
 
@@ -119,6 +127,12 @@ export default function ListPanel(props) {
               </Typography>
             )}
           />
+          <IconButton
+            className={styleClasses.deleteListButton}
+            onClick={() => props.onClickDelete(list.id)}
+          >
+            <CloseIcon />
+          </IconButton>
         </ListItem>
       ))
     );
@@ -126,9 +140,14 @@ export default function ListPanel(props) {
 
   return (
     <div className="list-panel">
-      <List>
+      <FlipMove
+        delay={50}
+        duration={105}
+        appearAnimation="fade"
+      >
         {generateLists()}
-      </List>
+        <div className={styleClasses.endDiv} />
+      </FlipMove>
     </div>
   );
 }
@@ -137,4 +156,5 @@ ListPanel.propTypes = {
   lists: PropTypes.arrayOf(Object).isRequired,
   onChangeList: PropTypes.func.isRequired,
   selectedList: PropTypes.string.isRequired,
+  onClickDelete: PropTypes.func.isRequired,
 };

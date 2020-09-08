@@ -17,7 +17,6 @@ class Item extends React.Component {
     super(props);
 
     this.state = {
-      content: this.props.content,
       endButtonsCollapsed: true,
     };
     this.onClickFinished = this.onClickFinished.bind(this);
@@ -26,7 +25,7 @@ class Item extends React.Component {
   }
 
   onClickEdit() {
-    this.props.onEditing(this.props.id, this.state.content);
+    this.props.onEditing(this.props.id, this.props.content);
   }
 
   onClickExpandEndButton() {
@@ -128,8 +127,8 @@ Item.propTypes = {
   finished: PropTypes.bool.isRequired,
   deleteSelf: PropTypes.func.isRequired,
   toggleFinished: PropTypes.func.isRequired,
-  toggleEmptyAlert: PropTypes.func.isRequired,
-  toggleSuccessAlert: PropTypes.func.isRequired,
+  // toggleEmptyAlert: PropTypes.func.isRequired,
+  // toggleSuccessAlert: PropTypes.func.isRequired,
   onEditing: PropTypes.func.isRequired,
 };
 

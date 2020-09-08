@@ -23,11 +23,14 @@ export default class AddItemField extends React.Component {
   }
 
   onAddItem = async () => {
-    if (this.state.translating && this.state.todoContent) {
-      await this.translateText();
-    }
-    this.props.addTodoItem(this.state.todoContent);
+    const listToAdd = this.props.selectedListID;
+    const currentText = this.state.todoContent;
     this.onClearAddField();
+    if (this.state.translating && this.state.todoContent) {
+      await this.translateText(listToAdd, currentText);
+    } else {
+      this.props.addTodoItem(listToAdd, this.state.todoContent);
+    }
   }
 
   onSubmitContent = (event) => {
@@ -61,7 +64,7 @@ export default class AddItemField extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async translateText() {
+  async translateText(listKey, text) {
     try {
       // await this.onToggleLoading();
       this.onToggleLoading();
@@ -72,13 +75,14 @@ export default class AddItemField extends React.Component {
             source: 'en',
             target: 'vi',
             // eslint-disable-next-line react/no-access-state-in-setstate
-            input: this.state.todoContent,
+            input: text,
           },
         });
       this.onToggleLoading();
-      this.setState({
-        todoContent: response.data.outputs[0].output,
-      });
+      this.props.addTodoItem(listKey, response.data.outputs[0].output);
+      // this.setState({
+      //   todoContent: response.data.outputs[0].output,
+      // });
       this.props.onLoading();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -150,4 +154,5 @@ export default class AddItemField extends React.Component {
 AddItemField.propTypes = {
   addTodoItem: PropTypes.func.isRequired,
   onLoading: PropTypes.func.isRequired,
+  selectedListID: PropTypes.string.isRequired,
 };

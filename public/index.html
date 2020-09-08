@@ -44,12 +44,24 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="/__/firebase/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
         https://firebase.google.com/docs/web/setup#available-libraries -->
 
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyDMIrp9zLKU5KBC_pbNmhVSfLaOt1NG5Pw",
+        authDomain: "todo-list-4bdd6.firebaseapp.com",
+        databaseURL: "https://todo-list-4bdd6.firebaseio.com",
+        projectId: "todo-list-4bdd6",
+        storageBucket: "todo-list-4bdd6.appspot.com",
+        messagingSenderId: "812723120518",
+        appId: "1:812723120518:web:e29f1836bf7ef0b659a407"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
   </body>
 </html>
