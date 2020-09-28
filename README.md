@@ -1,6 +1,7 @@
 # todo-list 
 
 > A simple to-do list web project created using React and Material UI Libary with the additional use of SYSTRAN API. The app is hosted by Firebase Hosting.
+> This project's purpose is for learning React framework.
 
 ### :link: [Try it out](https://todo-list-4bdd6.firebaseapp.com/)
 
