@@ -68,16 +68,16 @@ export default function BodyPanel() {
   const styleClasses = useStyle();
   // const [speedDialState, setSpeedDialState] = React.useState(false);
 
-  useEffect(async () => {
-    const localData = await localStorage.getItem('todo-list-data');
+  useEffect(() => {
+    const localData = localStorage.getItem('todo-list-data');
     if (localData) {
-      setLists(localData);
+      setLists(JSON.parse(localData));
     }
+  }, []);
 
-    return () => {
-      localStorage.getItem('todo-list-data');
-    };
-  }, [input]);
+  useEffect(() => {
+    localStorage.setItem('todo-list-data', JSON.stringify(lists));
+  }, [lists]);
 
   const onAddTodoList = (listType) => {
     const listID = uuidv4();
