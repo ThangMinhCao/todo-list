@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -67,6 +67,17 @@ export default function BodyPanel() {
 
   const styleClasses = useStyle();
   // const [speedDialState, setSpeedDialState] = React.useState(false);
+
+  useEffect(async () => {
+    const localData = await localStorage.getItem('todo-list-data');
+    if (localData) {
+      setLists(localData);
+    }
+
+    return () => {
+      localStorage.getItem('todo-list-data');
+    };
+  }, [input]);
 
   const onAddTodoList = (listType) => {
     const listID = uuidv4();

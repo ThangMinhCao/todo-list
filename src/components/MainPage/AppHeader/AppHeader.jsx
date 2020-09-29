@@ -24,9 +24,9 @@ export default function AppHeader() {
   const classes = AppBarStyles();
   return (
     <Toolbar className="top-bar">
-      <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+      {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
         <MenuIcon style={{ color: 'white' }} />
-      </IconButton>
+      </IconButton> */}
       <Typography align="right" variant="h5" className={classes.title}>
         Todo List
       </Typography>
